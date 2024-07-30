@@ -17,7 +17,7 @@
     "type": "git",
     "url": "git+https://github.com/getsafle/vault-bevm-controller.git"
   },
-  "author": "shubham@getsafle.com",
+  "author": "",
   "license": "MIT",
   "dependencies": {
     "mocha": "^10.7.0",
