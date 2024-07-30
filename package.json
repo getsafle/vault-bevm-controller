@@ -15,5 +15,15 @@
   "bugs": {
     "url": "https://github.com/getsafle/vault-bevm-controller/issues"
   },
-  "homepage": "https://github.com/getsafle/vault-bevm-controller#readme"
+  "homepage": "https://github.com/getsafle/vault-bevm-controller#readme",
+  "dependencies": {
+    "bip39": "^3.1.0",
+    "browser-passworder": "^2.0.3",
+    "eth-hd-keyring": "^3.6.0",
+    "eth-sig-util": "^3.0.1",
+    "eth-simple-keyring": "^4.2.0",
+    "events": "^3.3.0",
+    "loglevel": "^1.9.1",
+    "obs-store": "^4.0.3"
+  }
 }
