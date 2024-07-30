@@ -2,5 +2,6 @@
 
 ##### Polygon Keyring Implementation
 
-- Implemented Keyring functionality to enable account generation, export keys and signing methods
+- Implemented Keyring functionality to manage accounts 
+- Implemented functions to add account, export accounts & import accounts
 

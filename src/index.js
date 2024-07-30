@@ -150,6 +150,101 @@ class KeyringController extends EventEmitter {
             })
     }
 
+    /**
+     * Checks for duplicate keypairs, using the the first account in the given
+     * array. Rejects if a duplicate is found.
+     *
+     * Only supports 'Simple Key Pair'.
+     *
+     * @param {string} type - The key pair type to check for.
+     * @param {Array<string>} newAccountArray - Array of new accounts.
+     * @returns {Promise<Array<string>>} The account, if no duplicate is found.
+     */
+    checkForDuplicate(type, newAccountArray) {
+        return this.getAccounts()
+            .then((accounts) => {
+                switch (type) {
+                    case 'Simple Key Pair': {
+                        const isIncluded = Boolean(
+                            accounts.find(
+                                (key) => (
+                                    key === newAccountArray[0] ||
+                                    key === ethUtil.stripHexPrefix(newAccountArray[0])),
+                            ),
+                        )
+                        return isIncluded
+                            ? Promise.reject(new Error('The account you\'re are trying to import is a duplicate'))
+                            : Promise.resolve(newAccountArray)
+                    }
+                    default: {
+                        return Promise.resolve(newAccountArray)
+                    }
+                }
+            })
+    }
+
+    /**
+     * Add New Account
+     *
+     * Calls the `addAccounts` method on the given keyring,
+     * and then saves those changes.
+     *
+     * @param {Keyring} selectedKeyring - The currently selected keyring.
+     * @returns {Promise<Object>} A Promise that resolves to the state.
+     */
+    addNewAccount(selectedKeyring) {
+        return selectedKeyring.addAccounts(1)
+            .then((accounts) => {
+                accounts.forEach((hexAccount) => {
+                    this.emit('newAccount', hexAccount)
+                })
+            })
+            .then(this.persistAllKeyrings.bind(this))
+            .then(this._updateMemStoreKeyrings.bind(this))
+            .then(this.fullUpdate.bind(this))
+    }
+
+    /**
+     * Export Account
+     *
+     * Requests the private key from the keyring controlling
+     * the specified address.
+     *
+     * Returns a Promise that may resolve with the private key string.
+     *
+     * @param {string} address - The address of the account to export.
+     * @returns {Promise<string>} The private key of the account.
+     */
+    exportAccount(address) {
+        try {
+            return this.getKeyringForAccount(address)
+                .then((keyring) => {
+                    return keyring.exportAccount(normalizeAddress(address))
+                })
+        } catch (e) {
+            return Promise.reject(e)
+        }
+    }
+
+    importWallet(_privateKey) {
+        try {
+            
+            if (_privateKey.startsWith('0x')) {
+                _privateKey = _privateKey.slice(2)
+            }
+            const privateKey = Buffer.from(_privateKey, 'hex')
+            
+            if (!ethUtil.isValidPrivate(privateKey))
+                throw "Enter a valid private key"
+
+            const address = ethUtil.bufferToHex(ethUtil.privateToAddress(privateKey))
+            this.importedWallets.push(address);
+            return address
+        } catch (e) {
+            return Promise.reject(e)
+        }
+    }
+
     //
     // PRIVATE METHODS
     //
@@ -236,6 +331,35 @@ class KeyringController extends EventEmitter {
         return this.keyrings.filter((keyring) => keyring.type === type)
     }
 
+    /**
+     * Get Accounts
+     *
+     * Returns the public addresses of all current accounts
+     * managed by all currently unlocked keyrings.
+     *
+     * @returns {Promise<Array<string>>} The array of accounts.
+     */
+    async getAccounts() {
+        const keyrings = this.keyrings || []
+        const addrs = await Promise.all(keyrings.map((kr) => kr.getAccounts()))
+            .then((keyringArrays) => {
+                return keyringArrays.reduce((res, arr) => {
+                    return res.concat(arr)
+                }, [])
+            })
+        return addrs.map(normalizeAddress)
+    }
+
+
+    /**
+     * Get Keyring For Account
+     *
+     * Returns the currently initialized keyring that manages
+     * the specified `address` if one exists.
+     *
+     * @param {string} address - An account address.
+     * @returns {Promise<Keyring>} The keyring of the account, if it exists.
+     */
     getKeyringForAccount(address) {
         const hexed = normalizeAddress(address)
         log.debug(`KeyringController - getKeyringForAccount: ${hexed}`)
