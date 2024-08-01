@@ -10,6 +10,4 @@
 - Implemented functionality to get gass fees
 - Implemented functionality to broadcast a transaction
 - Added readme file
-
-
-
+- Added test suite
