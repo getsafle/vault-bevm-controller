@@ -1,4 +1,4 @@
-### 1.0.0 (2021-12-1)
+### 1.0.0 (2024-08-2)
 
 ##### BEVM Keyring Implementation
 
@@ -11,3 +11,6 @@
 - Implemented functionality to broadcast a transaction
 - Added readme file
 - Added test suite
+
+### 1.0.1 (2024-08-2)
+- Updated package name
