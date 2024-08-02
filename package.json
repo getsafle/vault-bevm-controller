@@ -19,10 +19,6 @@
   },
   "author": "",
   "license": "MIT",
-  "dependencies": {
-    "mocha": "^10.7.0",
-    "nyc": "^17.0.0"
-  },
   "bugs": {
     "url": "https://github.com/getsafle/vault-bevm-controller/issues"
   },
