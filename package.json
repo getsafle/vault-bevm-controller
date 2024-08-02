@@ -4,16 +4,42 @@
   "description": "BEVM controller for safle vault",
   "main": "src/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "lint": "eslint . --ext .js",
+    "lint:fix": "eslint --fix . --ext .js",
+    "test": "mocha \"test/**.js\" --timeout 15000",
+    "test:coverage": "npm run cover:unit && npm run cover:report",
+    "test:coveragehtml": "npm run cover:unit && npm run cover:reporthtml",
+    "cover:unit": "nyc --silent npm run test",
+    "cover:report": "nyc report --reporter=lcov --reporter=text --report-dir='./jscoverage'",
+    "cover:reporthtml": "nyc report --reporter=html --report-dir='./jscoverage'"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/getsafle/vault-bevm-controller.git"
   },
-  "author": "shubham@getsafle.com",
+  "author": "",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/getsafle/vault-bevm-controller/issues"
   },
-  "homepage": "https://github.com/getsafle/vault-bevm-controller#readme"
+  "homepage": "https://github.com/getsafle/vault-bevm-controller#readme",
+  "dependencies": {
+    "assert": "^2.1.0",
+    "bip39": "^3.1.0",
+    "browser-passworder": "^2.0.3",
+    "crypto-js": "^4.2.0",
+    "eth-hd-keyring": "^3.6.0",
+    "eth-sig-util": "^3.0.1",
+    "eth-simple-keyring": "^4.2.0",
+    "ethereumjs-tx": "^2.1.2",
+    "ethereumjs-util": "^7.1.5",
+    "events": "^3.3.0",
+    "loglevel": "^1.9.1",
+    "nyc": "^17.0.0",
+    "obs-store": "^4.0.3",
+    "web3": "^1.6.0"
+  },
+  "devDependencies": {
+    "mocha": "^10.7.0"
+  }
 }
