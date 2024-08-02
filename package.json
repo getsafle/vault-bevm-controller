@@ -1,5 +1,5 @@
 {
-  "name": "vault-bevm-controller",
+  "name": "@getsafle/vault-bevm-controller",
   "version": "1.0.0",
   "description": "BEVM controller for safle vault",
   "main": "src/index.js",
