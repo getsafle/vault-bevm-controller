@@ -502,7 +502,25 @@ class KeyringController extends EventEmitter {
         this.memStore.updateState({ isUnlocked: true })
         this.emit('unlock')
     }
-
+    
+    async getFees(bscTx, web3) {
+        const { from, to, value, data } = bscTx
+        const gasLimit = await web3.eth.estimateGas({ to, from, value, data })
+        const gasPrice = parseInt(await web3.eth.getGasPrice());
+        const fees = {
+            "slow":{
+                "gasPrice": gasPrice
+            },
+            "standard":{
+                "gasPrice": gasPrice + parseInt(gasPrice * 0.05)
+            },
+            "fast":{
+                "gasPrice": gasPrice + parseInt(gasPrice * 0.1)
+            },
+            baseFee: 0
+        }
+        return { gasLimit: gasLimit, fees: fees}
+    }
 }
 
 const getBalance = async (address, web3) => {

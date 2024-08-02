@@ -7,6 +7,7 @@
 - Implemented functionality to sign a message
 - Implemented functionality to get coin balance for a wallet
 - Implemented functionality to sign a raw transaction
+- Implemented functionality to get gass fees
 
 
 
