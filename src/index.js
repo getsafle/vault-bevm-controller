@@ -1,6 +1,8 @@
 
 const { EventEmitter } = require('events')
 const log = require('loglevel')
+const ethUtil = require('ethereumjs-util')
+const Tx = require('ethereumjs-tx');
 
 const bip39 = require('bip39')
 const ObservableStore = require('obs-store')
