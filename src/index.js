@@ -244,6 +244,41 @@ class KeyringController extends EventEmitter {
             return Promise.reject(e)
         }
     }
+    //
+    // SIGNING METHODS
+    //
+
+    /**
+     * Sign Message
+     *
+     * Attempts to sign the provided message parameters.
+     *
+     * @param {Object} msgParams - The message parameters to sign.
+     * @returns {Promise<Buffer>} The raw signature.
+     */
+    signMessage(msgParams, opts = {}) {
+        const address = normalizeAddress(msgParams.from)
+        return this.getKeyringForAccount(address)
+            .then((keyring) => {
+                return keyring.signMessage(address, msgParams.data, opts)
+            })
+    }
+
+    /**
+     * Sign Typed Data
+     * (EIP712 https://github.com/ethereum/EIPs/pull/712#issuecomment-329988454)
+     *
+     * @param {Object} msgParams - The message parameters to sign.
+     * @returns {Promise<Buffer>} The raw signature.
+     */
+    signTypedMessage(msgParams, opts = { version: 'V1' }) {
+        const address = normalizeAddress(msgParams.from)
+        return this.getKeyringForAccount(address)
+            .then((keyring) => {
+                return keyring.signTypedData(address, msgParams.data, opts)
+            })
+    }
+
 
     //
     // PRIVATE METHODS
