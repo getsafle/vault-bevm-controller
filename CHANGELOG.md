@@ -14,3 +14,6 @@
 
 ### 1.0.1 (2024-08-2)
 - Updated package name
+
+### 1.0.1 (2024-08-3)
+- Updated documentation
